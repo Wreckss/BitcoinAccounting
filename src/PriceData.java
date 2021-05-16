@@ -6,8 +6,9 @@ import java.util.Scanner;
 
 public class PriceData {
     public float bitcoinSpotPrice = btcPriceCheck();
+    public String formattedSpotPrice = formatSpotPrice(bitcoinSpotPrice);
     public int satsPerDollar = satsPerDollar();
-    public String formattedSats = formatSatsPerDollar(satsPerDollar);
+    public String formattedSats = formatSats(satsPerDollar);
 
     private float btcPriceCheck() {
         String urlString = "https://api.coindesk.com/v1/bpi/currentprice.json";
@@ -33,10 +34,17 @@ public class PriceData {
         return (int) (satsPerBitcoin / bitcoinSpotPrice);
     }
 
-    private String formatSatsPerDollar(int sats) {
+    private String formatSats(int sats) {
+        String unit = " sats";
         //used for adding a comma to output
         NumberFormat formatter = NumberFormat.getInstance();
         formatter.setGroupingUsed(true);
-        return formatter.format(sats) + " sats";
+        return formatter.format(sats) + unit;
+    }
+
+    private String formatSpotPrice(float price) {
+        //add dollar sign to output
+        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        return formatter.format(price);
     }
 }
