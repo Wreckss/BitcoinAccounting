@@ -6,6 +6,7 @@ import java.net.URL;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class PriceData {
@@ -19,10 +20,16 @@ public class PriceData {
     };
 
     private float btcPriceCheck() {
-        String urlString = "https://api.coindesk.com/v1/bpi/currentprice.json";
+        final String[] JSON_DATA = {
+                "https://api.coindesk.com/v1/bpi/currentprice.json",
+                "bpi",
+                "USD",
+                "rate_float"
+        };
         StringBuilder jsonString = new StringBuilder();
+
         try {
-            URL url = new URL(urlString);
+            final URL url = new URL(JSON_DATA[0]);
             Scanner scanner = new Scanner(url.openStream());
             while (scanner.hasNext()) {
                 jsonString.append(scanner.next());
@@ -31,10 +38,10 @@ public class PriceData {
             io.printStackTrace();
         }
         JSONObject jsonObject = new JSONObject(jsonString.toString());
-        JSONObject bitcoinPriceIndex = jsonObject.getJSONObject("bpi");
-        JSONObject usdPrice = bitcoinPriceIndex.getJSONObject("USD");
+        JSONObject bitcoinPriceIndex = jsonObject.getJSONObject(JSON_DATA[1]);
+        JSONObject usdPrice = bitcoinPriceIndex.getJSONObject(JSON_DATA[2]);
 
-        return usdPrice.getFloat("rate_float");
+        return usdPrice.getFloat(JSON_DATA[3]);
     }
 
     private int satsPerDollar() {
@@ -45,47 +52,50 @@ public class PriceData {
     private String formatSats(int sats) {
         final String UNIT = " sats";
         //used for adding a comma to output
-        NumberFormat formatter = NumberFormat.getInstance();
+        final NumberFormat formatter = NumberFormat.getInstance();
         formatter.setGroupingUsed(true);
         return formatter.format(sats) + UNIT;
     }
 
     private String formatUSD(float price) {
         //add dollar sign to output
-        NumberFormat formatter = NumberFormat.getCurrencyInstance();
+        final NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
         return formatter.format(price);
     }
 
     public String addPriceLabel(String price) {
-        final String priceLabel = "Bitcoin price: ";
-        return priceLabel + price;
+        final String PRICE_LABEL = "Bitcoin price: ";
+        return PRICE_LABEL + price;
     }
 
     public String addSatsPerDollarLabel(String sats) {
-        final String satsPerDollarLabel = "Sats per dollar: ";
-        return satsPerDollarLabel + sats;
+        final String SATS_LABEL = "Sats per dollar: ";
+        return SATS_LABEL + sats;
     }
 
     public void writePriceFile(String[] priceData) throws IOException {
-        BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("priceDataFile", true));
-        bufferedWriter.write(getDate() + getTime());
+        final String FILE_NAME = "priceDataFile";
+        final FileWriter fileWriter = new FileWriter(FILE_NAME, true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+        bufferedWriter.write(getDate() + ",\s" + getTime());
         bufferedWriter.newLine();
         for (String priceDatum : priceData) {
-            bufferedWriter.write("\t" + priceDatum + "\n");
+            bufferedWriter.write("\t" + priceDatum);
+            bufferedWriter.newLine();
         }
         bufferedWriter.close();
     }
 
     public String getDate() {
-        return java.time.LocalDate.now() + ",\s";
+        return java.time.LocalDate.now().toString();
     }
 
     public String getTime() {
-        String timeFormat = "HH:mm:ss";
+        final String timeFormat = "HH:mm:ss";     //HH results in 24H format
         SimpleDateFormat formatter = new SimpleDateFormat(timeFormat);
 
         return formatter.format(new Date());
     }
-
 
 }
