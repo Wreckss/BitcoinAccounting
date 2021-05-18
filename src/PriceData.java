@@ -13,6 +13,10 @@ public class PriceData {
     public String formattedSpotPrice = formatUSD(bitcoinSpotPrice);
     public int satsPerDollar = satsPerDollar();
     public String formattedSats = formatSats(satsPerDollar);
+    public String[] labeledData = {
+            addPriceLabel(formattedSpotPrice),
+            addSatsPerDollarLabel(formattedSats)
+    };
 
     private float btcPriceCheck() {
         String urlString = "https://api.coindesk.com/v1/bpi/currentprice.json";
@@ -62,10 +66,13 @@ public class PriceData {
         return satsPerDollarLabel + sats;
     }
 
-    public void writePriceFile(String priceData) throws IOException {
+    public void writePriceFile(String[] priceData) throws IOException {
         BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter("priceDataFile", true));
-        bufferedWriter.write(getDate() + getTime() + priceData);
+        bufferedWriter.write(getDate() + getTime());
         bufferedWriter.newLine();
+        for (String priceDatum : priceData) {
+            bufferedWriter.write("\t" + priceDatum + "\n");
+        }
         bufferedWriter.close();
     }
 
@@ -74,11 +81,10 @@ public class PriceData {
     }
 
     public String getTime() {
-        String timeFormat = "HH:mm:ss a";
+        String timeFormat = "HH:mm:ss";
         SimpleDateFormat formatter = new SimpleDateFormat(timeFormat);
-        Date date = new Date();
 
-        return formatter.format(date) + ",\s";
+        return formatter.format(new Date());
     }
 
 
