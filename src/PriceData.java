@@ -11,8 +11,9 @@ import java.util.Scanner;
 
 public class PriceData {
     public float bitcoinSpotPrice = btcPriceCheck();
+    //public float bitcoinSpotPrice = 40000;
     public String formattedSpotPrice = formatUSD(bitcoinSpotPrice);
-    public int satsPerDollar = satsPerDollar();
+    public int satsPerDollar = satsPerDollar(bitcoinSpotPrice);
     public String formattedSats = formatSats(satsPerDollar);
     public String[] labeledData = {
             addPriceLabel(formattedSpotPrice),
@@ -44,12 +45,12 @@ public class PriceData {
         return usdPrice.getFloat(JSON_DATA[3]);
     }
 
-    private int satsPerDollar() {
+    public int satsPerDollar(float price) {
         final int SATS_PER_BITCOIN = 100_000_000;
-        return (int) (SATS_PER_BITCOIN / bitcoinSpotPrice);
+        return (int) (SATS_PER_BITCOIN / price);
     }
 
-    private String formatSats(int sats) {
+    public String formatSats(int sats) {
         final String UNIT = " sats";
         //used for adding a comma to output
         final NumberFormat formatter = NumberFormat.getInstance();
@@ -57,7 +58,7 @@ public class PriceData {
         return formatter.format(sats) + UNIT;
     }
 
-    private String formatUSD(float price) {
+    public String formatUSD(double price) {
         //add dollar sign to output
         final NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
         return formatter.format(price);
