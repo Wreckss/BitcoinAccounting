@@ -1,7 +1,7 @@
 import java.util.Scanner;
 
 public class OpportunityCost extends PriceData {
-    private Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
     private final String productName = askProductName();
     public double productPrice = askProductPrice(productName);
     public int opportunityCost = calculateOpportunityCost(productPrice);
@@ -26,15 +26,20 @@ public class OpportunityCost extends PriceData {
         return String.format("The opportunity cost of this %s is %s!", productName, formatSats(cost));
     }
 
-    public void calculateFutureCost(double productPrice) {
+    public void calculateFutureCost(int opportunityCost) {
         final double annualGrowth = 2.135;      //213.5% annually
+        double futureSpot;
+        double[] projections;
+        int userAnswer;
 
         System.out.println("How many years would you like to project?");
-        int answer = scanner.nextInt();
-        double[] projections = new double[answer];
+        userAnswer = scanner.nextInt();
+        projections = new double[userAnswer];
+
         for (int i = 0; i < projections.length; i++) {
-            projections[i] = productPrice * annualGrowth;
-            productPrice = projections[i];
+            futureSpot = bitcoinSpotPrice * annualGrowth;
+            projections[i] = opportunityCost / (double) satsPerDollar(futureSpot);
+            bitcoinSpotPrice = futureSpot;
             System.out.printf("Year %s: %s\n", i+1, formatUSD(projections[i]));
         }
     }

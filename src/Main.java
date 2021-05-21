@@ -11,6 +11,6 @@ public class Main {
             io.printStackTrace();
         }
         System.out.println(oCost.labeledCost);
-        oCost.calculateFutureCost(oCost.productPrice);
+        oCost.calculateFutureCost(oCost.opportunityCost);
     }
 }

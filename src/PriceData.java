@@ -10,8 +10,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class PriceData {
-    public float bitcoinSpotPrice = btcPriceCheck();
-    //public float bitcoinSpotPrice = 40000;
+    public double bitcoinSpotPrice = btcPriceCheck();
     public String formattedSpotPrice = formatUSD(bitcoinSpotPrice);
     public int satsPerDollar = satsPerDollar(bitcoinSpotPrice);
     public String formattedSats = formatSats(satsPerDollar);
@@ -45,7 +44,7 @@ public class PriceData {
         return usdPrice.getFloat(JSON_DATA[3]);
     }
 
-    public int satsPerDollar(float price) {
+    public int satsPerDollar(double price) {
         final int SATS_PER_BITCOIN = 100_000_000;
         return (int) (SATS_PER_BITCOIN / price);
     }
@@ -60,8 +59,8 @@ public class PriceData {
 
     public String formatUSD(double price) {
         //add dollar sign to output
-        final NumberFormat formatter = NumberFormat.getCurrencyInstance(Locale.US);
-        return formatter.format(price);
+        final NumberFormat usdFormatter = NumberFormat.getCurrencyInstance(Locale.US);
+        return usdFormatter.format(price);
     }
 
     public String addPriceLabel(String price) {
