@@ -1,15 +1,15 @@
 import java.util.Scanner;
 
 public class OpportunityCost extends PriceData {
-    public final Scanner scanner = new Scanner(System.in);
+    private final Scanner scanner = new Scanner(System.in);
 
-    public String askProductName() {
+    private String askProductName() {
         System.out.println("Enter the product name you're considering purchasing:");
         return scanner.next().toLowerCase();
     }
 
     public double askProductPrice() {
-        String[] feedback = {
+        final String[] feedback = {
                 String.format("Enter the price of the %s:", askProductName()),
                 "$",
                 "Submit a number"
@@ -56,12 +56,13 @@ public class OpportunityCost extends PriceData {
     public boolean askQuit() {
         boolean validAnswer;
         boolean quit = false;
-        String[] feedback = {
+        final String[] feedback = {
                 "\n1. Run",
                 "2. Quit",
                 "Use 1 or 2 as an input",
                 "Quitting.."
         };
+
         do {
             System.out.println(feedback[0]);
             System.out.println(feedback[1]);

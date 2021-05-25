@@ -10,7 +10,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class PriceData {
-    final int SATS_PER_BITCOIN = 100_000_000;
+    private final int SATS_PER_BITCOIN = 100_000_000;
     public double bitcoinSpotPrice = btcPriceCheck();
     public int satsPerDollar = satsPerDollar(bitcoinSpotPrice);
     public String[] labeledData = {
@@ -18,7 +18,7 @@ public class PriceData {
             addSatsPerDollarLabel(formatSats(satsPerDollar))
     };
 
-    private float btcPriceCheck() {
+    private double btcPriceCheck() {
         final String[] WATCHPOINTS = {
                 "https://api.coindesk.com/v1/bpi/currentprice.json",
                 "bpi",
@@ -68,12 +68,12 @@ public class PriceData {
         return usdFormatter.format(price);
     }
 
-    public String addPriceLabel(String price) {
+    private String addPriceLabel(String price) {
         final String PRICE_LABEL = "Bitcoin price:\s";
         return PRICE_LABEL + price;
     }
 
-    public String addSatsPerDollarLabel(String sats) {
+    private String addSatsPerDollarLabel(String sats) {
         final String SATS_LABEL = "Sats per dollar:\s";
         return SATS_LABEL + sats;
     }
@@ -92,11 +92,11 @@ public class PriceData {
         bufferedWriter.close();
     }
 
-    public String getDate() {
+    private String getDate() {
         return java.time.LocalDate.now().toString();
     }
 
-    public String getTime() {
+    private String getTime() {
         final String timeFormat = "HH:mm:ss";     //HH results in 24H format
         SimpleDateFormat formatter = new SimpleDateFormat(timeFormat);
 
