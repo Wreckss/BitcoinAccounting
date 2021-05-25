@@ -12,12 +12,10 @@ import java.util.Scanner;
 public class PriceData {
     final int SATS_PER_BITCOIN = 100_000_000;
     public double bitcoinSpotPrice = btcPriceCheck();
-    public String formattedSpotPrice = formatUSD(bitcoinSpotPrice);
     public int satsPerDollar = satsPerDollar(bitcoinSpotPrice);
-    public String formattedSats = formatSats(satsPerDollar);
     public String[] labeledData = {
-            addPriceLabel(formattedSpotPrice),
-            addSatsPerDollarLabel(formattedSats)
+            addPriceLabel(formatUSD(bitcoinSpotPrice)),
+            addSatsPerDollarLabel(formatSats(satsPerDollar))
     };
 
     private float btcPriceCheck() {

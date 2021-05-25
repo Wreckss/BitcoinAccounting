@@ -9,10 +9,16 @@ public class OpportunityCost extends PriceData {
     }
 
     public double askProductPrice() {
-        System.out.printf("Enter the price of the %s:\n", askProductName());
-        System.out.print("$");
+        String[] feedback = {
+                String.format("Enter the price of the %s:", askProductName()),
+                "$",
+                "Submit a number"
+        };
+        System.out.println(feedback[0]);
+        System.out.print(feedback[1]);
         while (!scanner.hasNextDouble()) {
-            System.out.println("Submit a number");
+            System.out.println(feedback[2]);
+            System.out.print(feedback[1]);
             scanner.next();
         }
         return scanner.nextDouble();
@@ -53,16 +59,16 @@ public class OpportunityCost extends PriceData {
         String[] feedback = {
                 "\n1. Run",
                 "2. Quit",
-                "Submit a number",
-                "Quitting..",
-                "Use 1 or 2 as an input"
+                "Use 1 or 2 as an input",
+                "Quitting.."
         };
-
         do {
             System.out.println(feedback[0]);
             System.out.println(feedback[1]);
             while (!scanner.hasNextInt()) {
                 System.out.println(feedback[2]);
+                System.out.println(feedback[0]);
+                System.out.println(feedback[1]);
                 scanner.next();
             }
             switch (scanner.nextInt()) {
@@ -75,7 +81,7 @@ public class OpportunityCost extends PriceData {
                     quit = true;
                 }
                 default -> {
-                    System.out.println(feedback[4]);
+                    System.out.println(feedback[2]);
                     validAnswer = false;
                 }
             }
