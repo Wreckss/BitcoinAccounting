@@ -66,14 +66,16 @@ public class OpportunityCost extends PriceData {
                 scanner.next();
             }
             switch (scanner.nextInt()) {
+                // run
                 case 1 ->  validAnswer = true;
+                // quit
                 case 2 -> {
                     System.out.println(feedback[3]);
                     validAnswer = true;
                     quit = true;
                 }
                 default -> {
-                    System.out.println(feedback[3]);
+                    System.out.println(feedback[4]);
                     validAnswer = false;
                 }
             }
