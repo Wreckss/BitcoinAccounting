@@ -1,20 +1,20 @@
 import java.util.Scanner;
 
 public class OpportunityCost extends PriceData {
-    private final Scanner scanner = new Scanner(System.in);
-    private final String productName = askProductName();
-    public double productPrice = askProductPrice(productName);
-    public int opportunityCost = calculateOpportunityCost(productPrice);
-    public String labeledCost = labelOpportunityCost(opportunityCost);
-
+    public final Scanner scanner = new Scanner(System.in);
 
     public String askProductName() {
         System.out.println("Enter the product name you're considering purchasing:");
-        return scanner.next();
+        return scanner.next().toLowerCase();
     }
 
-    public double askProductPrice(String productName) {
-        System.out.printf("Enter the price of the %s:\n", productName);
+    public double askProductPrice() {
+        System.out.printf("Enter the price of the %s:\n", askProductName());
+        System.out.print("$");
+        while (!scanner.hasNextDouble()) {
+            System.out.println("Submit a number");
+            scanner.next();
+        }
         return scanner.nextDouble();
     }
 
@@ -22,26 +22,56 @@ public class OpportunityCost extends PriceData {
         return (int) productPrice * satsPerDollar;
     }
 
-    public String labelOpportunityCost(int cost) {
-        return String.format("The opportunity cost of this %s is %s!", productName, formatSats(cost));
+    public void displayOpportunityCost(int opportunityCost) {
+        System.out.printf("The opportunity cost of this purchase is %s\n", formatSats(opportunityCost));
     }
 
     public void calculateFutureCost(int opportunityCost) {
-        final double annualGrowth = 2.135;      //213.5% annually
+        final double ANNUAL_GROWTH = 2.1382;      //213.82% annually
+        double originalSpot = bitcoinSpotPrice;
         double futureSpot;
         double[] projections;
-        int userAnswer;
 
-        System.out.println("How many years would you like to project?");
-        userAnswer = scanner.nextInt();
-        projections = new double[userAnswer];
+        System.out.println("How many years out would you like to project this purchase?");
+        while (!scanner.hasNextInt()) {
+            System.out.println("Submit a number");
+            scanner.next();
+        }
+        projections = new double[scanner.nextInt()];
 
         for (int i = 0; i < projections.length; i++) {
-            futureSpot = bitcoinSpotPrice * annualGrowth;
+            futureSpot = originalSpot * ANNUAL_GROWTH;
+            originalSpot = futureSpot;
             projections[i] = opportunityCost / (double) satsPerDollar(futureSpot);
-            bitcoinSpotPrice = futureSpot;
-            System.out.printf("Year %s: %s\n", i+1, formatUSD(projections[i]));
+            System.out.printf("Year\s%s:\s%s\n", i + 1, formatUSD(projections[i]));
         }
+    }
+
+    public boolean askQuit() {
+        boolean validAnswer;
+        boolean quit = false;
+
+        do {
+            System.out.println("1. To run again");
+            System.out.println("2. To quit");
+            while (!scanner.hasNextInt()) {
+                System.out.println("Submit a number");
+                scanner.next();
+            }
+            switch (scanner.nextInt()) {
+                case 1 ->  validAnswer = true;
+                case 2 -> {
+                    System.out.println("Quitting..");
+                    quit = true;
+                    validAnswer = true;
+                }
+                default -> {
+                    System.out.println("Use 1 or 2 for inputs");
+                    validAnswer = false;
+                }
+            }
+        } while (!validAnswer);
+        return quit;
     }
 
 }

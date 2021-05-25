@@ -10,6 +10,7 @@ import java.util.Locale;
 import java.util.Scanner;
 
 public class PriceData {
+    final int SATS_PER_BITCOIN = 100_000_000;
     public double bitcoinSpotPrice = btcPriceCheck();
     public String formattedSpotPrice = formatUSD(bitcoinSpotPrice);
     public int satsPerDollar = satsPerDollar(bitcoinSpotPrice);
@@ -45,16 +46,22 @@ public class PriceData {
     }
 
     public int satsPerDollar(double price) {
-        final int SATS_PER_BITCOIN = 100_000_000;
         return (int) (SATS_PER_BITCOIN / price);
     }
 
-    public String formatSats(int sats) {
-        final String UNIT = " sats";
+    public String formatSats(int amount) {
         //used for adding a comma to output
         final NumberFormat formatter = NumberFormat.getInstance();
         formatter.setGroupingUsed(true);
-        return formatter.format(sats) + UNIT;
+        final String UNIT_LABEL;
+
+        if (amount > SATS_PER_BITCOIN) {
+            UNIT_LABEL = "\sBTC";
+            return ((double) amount / SATS_PER_BITCOIN) + UNIT_LABEL;
+        } else {
+            UNIT_LABEL = "\ssats";
+            return formatter.format(amount) + UNIT_LABEL;
+        }
     }
 
     public String formatUSD(double price) {
@@ -64,12 +71,12 @@ public class PriceData {
     }
 
     public String addPriceLabel(String price) {
-        final String PRICE_LABEL = "Bitcoin price: ";
+        final String PRICE_LABEL = "Bitcoin price:\s";
         return PRICE_LABEL + price;
     }
 
     public String addSatsPerDollarLabel(String sats) {
-        final String SATS_LABEL = "Sats per dollar: ";
+        final String SATS_LABEL = "Sats per dollar:\s";
         return SATS_LABEL + sats;
     }
 

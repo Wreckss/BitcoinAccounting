@@ -2,15 +2,19 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        PriceData priceData = new PriceData();
         OpportunityCost oCost = new OpportunityCost();
-
+        int opportunityCost;
+        double productPrice;
         try {
-            priceData.writePriceFile(priceData.labeledData);
+            oCost.writePriceFile(oCost.labeledData);
         } catch (IOException io) {
             io.printStackTrace();
         }
-        System.out.println(oCost.labeledCost);
-        oCost.calculateFutureCost(oCost.opportunityCost);
+        do {
+            productPrice = oCost.askProductPrice();
+            opportunityCost = oCost.calculateOpportunityCost(productPrice);
+            oCost.displayOpportunityCost(opportunityCost);
+            oCost.calculateFutureCost(opportunityCost);
+        } while (!oCost.askQuit());
     }
 }
