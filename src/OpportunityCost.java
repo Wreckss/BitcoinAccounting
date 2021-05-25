@@ -50,23 +50,30 @@ public class OpportunityCost extends PriceData {
     public boolean askQuit() {
         boolean validAnswer;
         boolean quit = false;
+        String[] feedback = {
+                "\n1. Run",
+                "2. Quit",
+                "Submit a number",
+                "Quitting..",
+                "Use 1 or 2 as an input"
+        };
 
         do {
-            System.out.println("1. To run again");
-            System.out.println("2. To quit");
+            System.out.println(feedback[0]);
+            System.out.println(feedback[1]);
             while (!scanner.hasNextInt()) {
-                System.out.println("Submit a number");
+                System.out.println(feedback[2]);
                 scanner.next();
             }
             switch (scanner.nextInt()) {
                 case 1 ->  validAnswer = true;
                 case 2 -> {
-                    System.out.println("Quitting..");
-                    quit = true;
+                    System.out.println(feedback[3]);
                     validAnswer = true;
+                    quit = true;
                 }
                 default -> {
-                    System.out.println("Use 1 or 2 for inputs");
+                    System.out.println(feedback[3]);
                     validAnswer = false;
                 }
             }

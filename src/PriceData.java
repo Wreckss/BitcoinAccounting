@@ -21,7 +21,7 @@ public class PriceData {
     };
 
     private float btcPriceCheck() {
-        final String[] JSON_DATA = {
+        final String[] WATCHPOINTS = {
                 "https://api.coindesk.com/v1/bpi/currentprice.json",
                 "bpi",
                 "USD",
@@ -30,7 +30,7 @@ public class PriceData {
         StringBuilder jsonString = new StringBuilder();
 
         try {
-            final URL url = new URL(JSON_DATA[0]);
+            final URL url = new URL(WATCHPOINTS[0]);
             Scanner scanner = new Scanner(url.openStream());
             while (scanner.hasNext()) {
                 jsonString.append(scanner.next());
@@ -39,10 +39,10 @@ public class PriceData {
             io.printStackTrace();
         }
         JSONObject jsonObject = new JSONObject(jsonString.toString());
-        JSONObject bitcoinPriceIndex = jsonObject.getJSONObject(JSON_DATA[1]);
-        JSONObject usdPrice = bitcoinPriceIndex.getJSONObject(JSON_DATA[2]);
+        JSONObject bitcoinPriceIndex = jsonObject.getJSONObject(WATCHPOINTS[1]);
+        JSONObject usdPrice = bitcoinPriceIndex.getJSONObject(WATCHPOINTS[2]);
 
-        return usdPrice.getFloat(JSON_DATA[3]);
+        return usdPrice.getFloat(WATCHPOINTS[3]);
     }
 
     public int satsPerDollar(double price) {

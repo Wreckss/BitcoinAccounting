@@ -4,17 +4,15 @@ public class Main {
     public static void main(String[] args) {
         OpportunityCost oCost = new OpportunityCost();
         int opportunityCost;
-        double productPrice;
         try {
             oCost.writePriceFile(oCost.labeledData);
         } catch (IOException io) {
             io.printStackTrace();
         }
-        do {
-            productPrice = oCost.askProductPrice();
-            opportunityCost = oCost.calculateOpportunityCost(productPrice);
+        while (!oCost.askQuit()) {
+            opportunityCost = oCost.calculateOpportunityCost(oCost.askProductPrice());
             oCost.displayOpportunityCost(opportunityCost);
             oCost.calculateFutureCost(opportunityCost);
-        } while (!oCost.askQuit());
+        }
     }
 }
